@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Artifacts · Teachable</title>
+<script src="gate.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --lemon: #e7ff33; --obsidian: #222222; --ink: #2a2a2a;
+    --grey: #6b6b6b; --grey-soft: #9a9a9a; --line: #e7e4dd;
+    --canvas: #faf9f5; --card: #ffffff; --card-soft: #f4f2ec;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --serif: 'Reckless-Light', 'Reckless', 'Fraunces', Palatino, Garamond, Georgia, serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--sans); background: var(--canvas); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 80px 40px 120px; }
+
+  .chip { display: inline-block; background: var(--lemon); color: var(--obsidian); font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 5px; margin-bottom: 18px; }
+  header h1 { font-family: var(--serif); font-weight: 400; font-size: 52px; line-height: 1.04; letter-spacing: -0.5px; }
+  header .lede { color: var(--grey); font-size: 16px; margin-top: 16px; max-width: 52ch; }
+
+  .eyebrow { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey-soft); margin: 52px 0 16px; }
+
+  /* Featured: design system */
+  .feature { display: flex; align-items: stretch; gap: 0; text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--card); transition: transform 0.15s, box-shadow 0.15s; margin-top: 8px; }
+  .feature:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.07); }
+  .feature-body { flex: 1; padding: 28px 30px; }
+  .feature-kicker { font-family: var(--mono); font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey-soft); }
+  .feature-title { font-family: var(--serif); font-weight: 400; font-size: 28px; line-height: 1.1; margin: 8px 0 8px; }
+  .feature-desc { color: var(--grey); font-size: 14px; max-width: 44ch; }
+  .feature-strip { width: 168px; flex-shrink: 0; display: flex; }
+  .feature-strip div { flex: 1; }
+
+  .grid { display: grid; gap: 12px; }
+  a.card { display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; transition: transform 0.15s, box-shadow 0.15s; }
+  a.card:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(0,0,0,0.06); }
+  .card-body { flex: 1; }
+  .card-titlerow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .card-title { font-size: 15px; font-weight: 600; }
+  .owner { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; line-height: 1.35; letter-spacing: 0.01em; }
+  .card-desc { font-size: 13px; color: var(--grey); margin-top: 3px; }
+  .card-arrow { color: var(--grey-soft); font-size: 18px; }
+
+  /* Skills: cards carry two actions, so they're not whole-card links */
+  .section-note { font-size: 13px; color: var(--grey); margin: -4px 0 14px; max-width: 60ch; }
+  .section-note code { font-family: var(--mono); font-size: 0.9em; background: var(--card-soft); padding: 1px 5px; border-radius: 4px; }
+  .skill-card { display: flex; flex-direction: column; gap: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+  .skill-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-size: 13px; font-weight: 600; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line); cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+  .btn-primary { background: var(--lemon); color: var(--obsidian); border-color: var(--obsidian); }
+  .btn-primary:hover { background: #d9f200; }
+  .btn-secondary { background: var(--card); color: var(--ink); }
+  .btn-secondary:hover { border-color: var(--obsidian); }
+  .empty { border: 1px dashed var(--line); border-radius: 12px; padding: 22px; color: var(--grey); font-size: 13.5px; text-align: center; }
+  .empty code, footer code { font-family: var(--mono); font-size: 0.9em; background: var(--card-soft); padding: 1px 5px; border-radius: 4px; }
+  footer { margin-top: 60px; font-size: 12px; color: var(--grey-soft); border-top: 1px solid var(--line); padding-top: 20px; }
+  footer .gh-link { display: inline-block; margin-bottom: 10px; color: var(--ink); font-weight: 600; font-size: 13px; text-decoration: none; }
+  footer .gh-link:hover { color: var(--obsidian); }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 48px 24px 80px; }
+    header h1 { font-size: 40px; }
+    .feature { flex-direction: column; }
+    .feature-strip { width: 100%; height: 14px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <span class="chip">Teachable · Design</span>
+      <h1>Design Artifacts</h1>
+      <p class="lede">Live prototypes, presentations, and the design system that guides them. Internal — share links with care.</p>
+    </header>
+
+    <div class="eyebrow">Design system</div>
+    <a class="feature" href="design-system/">
+      <div class="feature-body">
+        <div class="feature-kicker">Foundations · Components · Guidelines</div>
+        <div class="feature-title">Teachable DESIGN.md</div>
+        <div class="feature-desc">Colors, typography, components, and usage rules — rendered live from <code>DESIGN.md</code>, the source Claude reads when building prototypes.</div>
+      </div>
+      <div class="feature-strip">
+        <div style="background:#E6FF32; flex:8"></div>
+        <div style="background:#711014; flex:2"></div>
+        <div style="background:#480601; flex:2"></div>
+        <div style="background:#465F01; flex:2"></div>
+        <div style="background:#B6F2E8; flex:1"></div>
+        <div style="background:#FFE3BE; flex:1"></div>
+        <div style="background:#E5CCFF; flex:1"></div>
+      </div>
+    </a>
+
+    <div class="eyebrow">Prototypes</div>
+    <div class="grid">
+      <!-- New prototype? Add its card here IN THE SAME BRANCH that adds the prototype.
+           The Vercel PR preview only links to this index, so the card is what makes
+           your prototype reachable from the preview before it's merged. See AGENTS.md → Prototypes.
+           Owner pill: set data-owner to the creator's name; color is auto-assigned.
+           Tip: `git log --follow --diff-filter=A -- <file>` shows the true creator. -->
+      <a class="card" href="prototypes/dashboard-prototype.html" data-owner="Shivani">
+        <div class="card-body">
+          <div class="card-titlerow">
+            <div class="card-title">Creator Dashboard</div>
+          </div>
+          <div class="card-desc">Home screen concept — stats, revenue, completion, live activity.</div>
+        </div>
+        <span class="card-arrow">→</span>
+      </a>
+      <a class="card" href="prototypes/quiz-builder" data-owner="Sarah">
+        <div class="card-body">
+          <div class="card-titlerow">
+            <div class="card-title">Assessment Quiz Builder</div>
+          </div>
+          <div class="card-desc">Design-notebook exploration — a creator builds a French-level placement quiz (questions, scoring, lead capture, offer). Styled from DESIGN.md.</div>
+        </div>
+        <span class="card-arrow">→</span>
+      </a>
+      <a class="card" href="prototypes/ai-tutor-setup" data-owner="Sarah">
+        <div class="card-body">
+          <div class="card-titlerow">
+            <div class="card-title">AI Tutor Setup</div>
+          </div>
+          <div class="card-desc">Design-notebook exploration — a creator sets up an AI tutor trained on their French courses (sources, persona, placement, live test chat). Styled from DESIGN.md.</div>
+        </div>
+        <span class="card-arrow">→</span>
+      </a>
+      <a class="card" href="prototypes/onboarding-home-redesign.html" data-owner="Shivani">
+        <div class="card-body">
+          <div class="card-titlerow">
+            <div class="card-title">Creator Home — Onboarding</div>
+          </div>
+          <div class="card-desc">Redesigned first-run home that walks a new creator through shipping their first product.</div>
+        </div>
+        <span class="card-arrow">→</span>
+      </a>
+      <a class="card" href="prototypes/dashboard-home-day0-course-created.html" data-owner="Shivani">
+        <div class="card-body">
+          <div class="card-titlerow">
+            <div class="card-title">Dashboard — Day 0</div>
+          </div>
+          <div class="card-desc">Creator home the day a first course is created — momentum, next steps, and early activity.</div>
+        </div>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+
+    <div class="eyebrow">Presentations</div>
+    <div class="grid">
+      <a class="card" href="presentations/onboarding-impact.html" data-owner="Sarah">
+        <div class="card-body">
+          <div class="card-titlerow">
+            <div class="card-title">Onboarding Redesign — Impact Analysis</div>
+          </div>
+          <div class="card-desc">Did the new onboarding move the numbers? Completion, in‑session product creation, and trial conversion across the staggered rollout — fraud spike isolated. Directional read + a strategy. Illustrative figures.</div>
+        </div>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+
+    <div class="eyebrow">Skills</div>
+    <p class="section-note">Custom Claude skills you can install. Download the <code>.zip</code>, unzip it into <code>~/.claude/skills/&lt;name&gt;/</code>, and restart Claude. Or read the <code>SKILL.md</code> on GitHub first.</p>
+    <div class="grid">
+      <div class="card skill-card" data-owner="Sarah">
+        <div class="card-body">
+          <div class="card-titlerow">
+            <div class="card-title">iOS Commerce Compliance</div>
+          </div>
+          <div class="card-desc">Critique iOS purchase &amp; checkout designs against current Apple App Store rules (US storefront) — catches compliance problems early and suggests compliant alternatives. Not legal advice.</div>
+        </div>
+        <div class="skill-actions">
+          <a class="btn btn-primary" href="skills/ios-commerce-compliance.zip" download>↓ Download .zip</a>
+          <a class="btn btn-secondary" href="https://github.com/sarahschachman/design-artifacts/blob/main/site/skills/ios-commerce-compliance/SKILL.md" target="_blank" rel="noopener">View on GitHub ↗</a>
+        </div>
+      </div>
+      <div class="card skill-card" data-owner="Sarah">
+        <div class="card-body">
+          <div class="card-titlerow">
+            <div class="card-title">Teachable Slides</div>
+          </div>
+          <div class="card-desc">Make on-brand presentations with Teachable's Google Slides template — which slides to copy, colors, fonts, logos, the image library, and accessibility.</div>
+        </div>
+        <div class="skill-actions">
+          <a class="btn btn-primary" href="skills/teachable-slides.zip" download>↓ Download .zip</a>
+          <a class="btn btn-secondary" href="https://github.com/sarahschachman/design-artifacts/blob/main/site/skills/teachable-slides/SKILL.md" target="_blank" rel="noopener">View on GitHub ↗</a>
+        </div>
+      </div>
+      <div class="card skill-card" data-owner="Sarah">
+        <div class="card-body">
+          <div class="card-titlerow">
+            <div class="card-title">Psychology Foundations</div>
+          </div>
+          <div class="card-desc">The cognitive psychology, behavioral science &amp; neuroscience behind <em>why</em> UX patterns work — every principle cited to its original research.</div>
+        </div>
+        <div class="skill-actions">
+          <a class="btn btn-primary" href="skills/psychology-foundations.zip" download>↓ Download .zip</a>
+          <a class="btn btn-secondary" href="https://github.com/sarahschachman/design-artifacts/blob/main/site/skills/psychology-foundations/SKILL.md" target="_blank" rel="noopener">View on GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="eyebrow">Recommended tools</div>
+    <div class="grid">
+      <a class="card" href="https://github.com/sarahschachman/design-artifacts/blob/main/docs/recommended-tools.md" target="_blank" rel="noopener">
+        <div class="card-body">
+          <div class="card-titlerow">
+            <div class="card-title">Recommended skills, plugins &amp; MCPs ↗</div>
+          </div>
+          <div class="card-desc">A curated list of external skills, plugins, and MCP servers worth adopting — grouped by General, Design, and Research, each with a "use when."</div>
+        </div>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+
+    <footer>
+      <a class="gh-link" href="https://github.com/sarahschachman/design-artifacts" target="_blank" rel="noopener">View on GitHub ↗</a><br>
+      Add new work under <code>site/</code> and link it above. There's a light password gate (<code>gate.js</code>) — it only deters casual visitors, so keep everything fake-data only.
+    </footer>
+  </div>
+
+<script>
+/* Owner pills — each card's data-owner sets the name; the pill color is
+   auto-assigned from the Teachable secondary/tertiary palette by hashing it. */
+(function(){
+  const PALETTE = [
+    { bg:'#711014', fg:'#ffffff' }, // Bordeaux
+    { bg:'#480601', fg:'#ffffff' }, // Cabernet
+    { bg:'#465F01', fg:'#ffffff' }, // Olive
+    { bg:'#B6F2E8', fg:'#173d37' }, // Turquoise
+    { bg:'#FFE3BE', fg:'#6b4415' }, // Peach
+    { bg:'#E5CCFF', fg:'#3c2a5e' }, // Violet
+  ];
+  function colorFor(name){ let h=0; const s=(name||'').toLowerCase(); for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0; return PALETTE[h % PALETTE.length]; }
+  function firstName(n){ const t=String(n).replace(/[_-]/g,' ').trim().split(/\s+/)[0]||String(n); return t.charAt(0).toUpperCase()+t.slice(1); }
+  function makePill(name){ const c=colorFor(name); const el=document.createElement('span'); el.className='owner'; el.style.background=c.bg; el.style.color=c.fg; el.textContent=name; el.title='Owner: '+name; return el; }
+  function run(){
+    document.querySelectorAll('.card[data-owner]').forEach(function(card){
+      const owner=card.getAttribute('data-owner'); if(!owner) return;
+      const row=card.querySelector('.card-titlerow'); if(row) row.appendChild(makePill(firstName(owner)));
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', run); else run();
+})();
+</script>
+</body>
+</html>

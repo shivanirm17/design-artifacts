@@ -1,0 +1,7 @@
+# brainstorm + browser-preview scratch
+.superpowers/
+.playwright-mcp/
+
+# design-notebook exploration build artifacts
+prototype-src/**/node_modules/
+prototype-src/**/dist/
